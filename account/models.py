@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
-    def _create_user(self, email, password, **kwargs):
+    def create_user(self, email, password, **kwargs):
         if not email:
             return ValueError('Email must be set!!!')
         
@@ -18,10 +18,10 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_user(self, email, password=None, **kwargs):
-        kwargs.setdefault('is_staff', False)
-        kwargs.setdefault('is_superuser', False)
-        return self._create_user(email, password, **kwargs)
+    # def create_user(self, email, password=None, **kwargs):
+    #     kwargs.setdefault('is_staff', False)
+    #     kwargs.setdefault('is_superuser', False)
+    #     return self._create_user(email, password, **kwargs)
 
     def create_superuser(self, email, password, **kwargs):
         kwargs.setdefault('is_staff', True)
@@ -30,9 +30,7 @@ class UserManager(BaseUserManager):
 
         if kwargs.get('is_staff') is not True:
             raise ValueError('Superuser must bue have status is_staff=True!!!')
-        if kwargs.get('is_superuser') is not True:
-            raise ValueError('Superuser must have status is_superuser=True!!!')
-        
+
         return self._create_user(email, password, **kwargs)
 
 
